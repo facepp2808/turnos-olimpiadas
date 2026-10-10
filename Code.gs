@@ -2,7 +2,7 @@
 // Pegar en: Google Sheet > Extensiones > Apps Script. Ver LEEME.md.
 
 const HOJA = 'Cupos';
-const CLAVE_ADMIN = 'CAMBIA-ESTA-CLAVE'; // cámbiala antes de implementar
+const CLAVE_ADMIN = 'CPSM'; // cámbiala antes de implementar
 const COLS = ['id', 'pestana', 'descripcion', 'fecha', 'horario', 'inicio', 'n', 'nombre', 'curso'];
 
 // Ejecutar UNA vez desde el editor para crear la hoja con los 88 cupos.

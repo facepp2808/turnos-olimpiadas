@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turnos Olimpiadas Colegio Parroquial San Miguel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #f5f6f4; --surface: #ffffff; --fg: #1c2420; --muted: #5c6862; --line: #d9dfdb;
+  --accent: #1f6f5c; --accent-fg: #ffffff; --locked: #eceeed; --ok: #1f6f5c; --err: #b3321f;
+  --font-body: "Hanken Grotesk", system-ui, sans-serif; --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #111715; --surface: #1a221f; --fg: #e6ebe8; --muted: #9aa6a0; --line: #2d3833;
+    --accent: #4fb89e; --accent-fg: #0b1512; --locked: #232d29; --ok: #4fb89e; --err: #ee8070; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; padding-inline: 16px; padding-block: 28px 56px; }
+main { max-width: 760px; margin-inline: auto; }
+#admin { max-width: 1000px; }
+.brand { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+.brand img { height: 72px; width: auto; max-width: 30vw; object-fit: contain; }
+h1 { font-size: 1.7rem; margin: 0 0 6px; text-wrap: balance; }
+.lead { color: var(--muted); margin: 0 0 24px; max-width: 60ch; }
+.tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.rows { display: flex; flex-direction: column; gap: 12px; }
+.row { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 16px; }
+.row.done { border-style: dashed; }
+.info { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.desc { font-weight: 700; flex: 1 1 14rem; min-width: 0; }
+.when { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
+label { display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); min-width: 0; }
+input { font: inherit; font-size: 1rem; letter-spacing: normal; text-transform: none; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 9px 10px; width: 100%; min-width: 0; }
+input:disabled { background: var(--locked); color: var(--fg); -webkit-text-fill-color: var(--fg); opacity: 1; cursor: not-allowed; }
+input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button { font: inherit; font-weight: 700; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 6px; padding: 11px 26px; cursor: pointer; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.tab, button.alt { background: transparent; color: var(--fg); border: 1px solid var(--line); padding: 9px 20px; }
+button.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button.danger { background: transparent; color: var(--err); border: 1px solid var(--err); padding: 8px 14px; }
+.bar { position: sticky; bottom: 0; margin-top: 20px; padding-block: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; background: var(--bg); border-top: 1px solid var(--line); }
+.msg { font-size: 0.92rem; min-height: 1.3em; }
+.msg.ok { color: var(--ok); } .msg.err { color: var(--err); }
+.empty { color: var(--muted); padding: 24px; border: 1px dashed var(--line); border-radius: 8px; }
+.tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+.arow { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 12px; align-items: end; }
+.arow .full { grid-column: 1 / -1; }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.acts button { padding: 8px 16px; }
+.login { display: flex; gap: 10px; flex-wrap: wrap; max-width: 420px; }
+.login input { flex: 1 1 200px; }
+@media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<main id="public">
+  <header class="brand"><img id="logo" src="logo.png" alt="Logo del Colegio Parroquial San Miguel" onerror="this.remove()"><h1>Turnos Olimpiadas Colegio Parroquial San Miguel</h1></header>
+  <p class="lead">Sábado 24 de octubre. Elige tu pestaña, completa nombre y curso en el turno que te corresponde y presiona Guardar. Una vez guardado, esos datos quedan ocultos y ya no se pueden modificar.</p>
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" class="tab" data-tab="apoderados">Apoderados</button>
+    <button type="button" role="tab" class="tab" data-tab="delegados">Delegados</button>
+  </div>
+  <div id="rows" class="rows"><div class="empty">Cargando turnos…</div></div>
+  <div class="bar">
+    <button id="save" type="button" disabled>Guardar</button>
+    <span id="msg" class="msg" role="status" aria-live="polite"></span>
+  </div>
+</main>
+
+<main id="admin" hidden>
+  <h1>Administración</h1>
+  <p class="lead">Edita cualquier dato, agrega o elimina turnos y descarga todo en CSV.</p>
+  <form id="login" class="login">
+    <input id="clave" type="password" placeholder="Clave de administración" autocomplete="current-password" required>
+    <button type="submit">Entrar</button>
+    <span id="login-msg" class="msg" role="status"></span>
+  </form>
+  <div id="panel" hidden>
+    <div class="tools">
+      <button id="a-add" type="button">Agregar turno</button>
+      <button id="a-csv" type="button" class="alt">Descargar CSV</button>
+      <span id="a-msg" class="msg" role="status" aria-live="polite"></span>
+    </div>
+    <div id="a-rows"></div>
+  </div>
+</main>
+
+<script>
+// Pega aquí la URL de la implementación de Apps Script (termina en /exec). Ver LEEME.md.
+var API = "PEGA_AQUI_LA_URL_DE_APPS_SCRIPT";
+
+var $ = function (id) { return document.getElementById(id); };
+function call(payload) {
+  return fetch(API, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) }).then(function (r) { return r.json(); });
+}
+function sorter(a, b) {
+  return String(a.descripcion).localeCompare(String(b.descripcion), "es", { sensitivity: "base" }) ||
+    (String(a.fecha) + String(a.inicio)).localeCompare(String(b.fecha) + String(b.inicio)) || a.n - b.n;
+}
+function fmtDate(iso) {
+  var p = String(iso || "").split("-");
+  if (p.length !== 3) return iso || "";
+  return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString("es", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+}
+function say(el, t, k) { el.textContent = t || ""; el.className = "msg" + (k ? " " + k : ""); }
+function clean(s) { return String(s || "").trim().replace(/\s+/g, " ").slice(0, 80); }
+
+/* ---------- Vista pública ---------- */
+var filas = [], tab = "apoderados", drafts = {};
+var rowsEl = $("rows"), saveBtn = $("save"), msg = $("msg");
+
+function render() {
+  var lista = filas.filter(function (f) { return f.pestana === tab; }).sort(sorter);
+  rowsEl.innerHTML = "";
+  if (!lista.length) { rowsEl.innerHTML = '<div class="empty">No hay turnos cargados en esta pestaña.</div>'; refreshBtn(); return; }
+  lista.forEach(function (f) {
+    var el = document.createElement("div");
+    el.className = "row" + (f.ocupado ? " done" : "");
+    var info = document.createElement("div"); info.className = "info";
+    var d = document.createElement("span"); d.className = "desc"; d.textContent = f.descripcion;
+    var w = document.createElement("span"); w.className = "when";
+    w.textContent = [fmtDate(f.fecha), f.horario, "N° " + f.n].filter(Boolean).join(" · ");
+    info.appendChild(d); info.appendChild(w); el.appendChild(info);
+    [["nombre", "Nombre"], ["curso", "Curso"]].forEach(function (c) {
+      var l = document.createElement("label"); l.appendChild(document.createTextNode(c[1]));
+      var i = document.createElement("input"); i.id = c[0] + "-" + f.id; i.maxLength = 80; i.autocomplete = "off";
+      if (f.ocupado) { i.type = "password"; i.value = "••••••"; i.disabled = true; i.setAttribute("aria-label", c[1] + " (guardado, oculto)"); }
+      else {
+        i.type = "text"; i.value = (drafts[f.id] || {})[c[0]] || "";
+        i.addEventListener("input", function () { (drafts[f.id] = drafts[f.id] || {})[c[0]] = i.value; refreshBtn(); });
+      }
+      l.appendChild(i); el.appendChild(l);
+    });
+    rowsEl.appendChild(el);
+  });
+  refreshBtn();
+}
+function pendientes() {
+  return filas.filter(function (f) { var d = drafts[f.id]; return !f.ocupado && d && (d.nombre || "").trim() || !f.ocupado && d && (d.curso || "").trim(); });
+}
+function refreshBtn() { saveBtn.disabled = !pendientes().length; }
+
+function cargar() {
+  return fetch(API).then(function (r) { return r.json(); }).then(function (j) {
+    if (!j.ok) throw new Error("api");
+    filas = j.filas; render();
+  }).catch(function () { rowsEl.innerHTML = '<div class="empty">No se pudieron cargar los turnos. Intenta de nuevo en unos minutos.</div>'; });
+}
+
+document.querySelectorAll(".tab").forEach(function (b) {
+  b.setAttribute("aria-selected", String(b.dataset.tab === tab));
+  b.addEventListener("click", function () {
+    tab = b.dataset.tab; say(msg, "");
+    document.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", String(x === b)); });
+    render();
+  });
+});
+
+saveBtn.addEventListener("click", function () {
+  var lista = pendientes();
+  var malas = lista.filter(function (f) { var d = drafts[f.id]; return !clean(d.nombre) || !clean(d.curso); });
+  if (malas.length) { say(msg, "Completa nombre y curso en cada turno que quieras guardar.", "err"); return; }
+  saveBtn.disabled = true; say(msg, "Guardando…");
+  call({ action: "guardar", filas: lista.map(function (f) { return { id: f.id, nombre: clean(drafts[f.id].nombre), curso: clean(drafts[f.id].curso) }; }) })
+    .then(function (j) {
+      if (!j.ok) throw new Error("api");
+      var ok = 0, ocu = 0;
+      Object.keys(j.resultados).forEach(function (id) {
+        if (j.resultados[id] === "ok") { ok++; delete drafts[id]; } else if (j.resultados[id] === "ocupado") { ocu++; delete drafts[id]; }
+      });
+      var p = [];
+      if (ok) p.push(ok === 1 ? "Se guardó 1 registro." : "Se guardaron " + ok + " registros.");
+      if (ocu) p.push(ocu + " ya estaba" + (ocu > 1 ? "n" : "") + " ocupado" + (ocu > 1 ? "s" : "") + " por otra persona.");
+      say(msg, p.join(" ") || "No se guardó nada.", ocu ? "err" : "ok");
+      return cargar();
+    })
+    .catch(function () { say(msg, "No se pudo guardar. Intenta de nuevo.", "err"); refreshBtn(); });
+});
+
+setInterval(function () {
+  var a = document.activeElement;
+  if (!$("public").hidden && !(a && a.tagName === "INPUT") && !pendientes().length) cargar();
+}, 30000);
+
+/* ---------- Administración (#admin) ---------- */
+var clave = "", aFilas = [];
+var FIELDS = [["pestana", "Pestaña (apoderados / delegados)"], ["descripcion", "Descripción", "full"], ["fecha", "Fecha (AAAA-MM-DD)"], ["horario", "Horario"], ["inicio", "Hora inicio (HH:MM)"], ["n", "N°"], ["nombre", "Nombre"], ["curso", "Curso"]];
+var aMsg = $("a-msg");
+
+function adminCargar() {
+  return call({ action: "admin_listar", clave: clave }).then(function (j) {
+    if (!j.ok) throw new Error(j.error);
+    aFilas = j.filas.sort(function (a, b) { return String(a.pestana).localeCompare(b.pestana) || a.n - b.n; });
+    adminRender();
+  });
+}
+function adminRender() {
+  var box = $("a-rows"); box.innerHTML = "";
+  aFilas.forEach(function (f) {
+    var w = document.createElement("div"); w.className = "arow";
+    var inputs = {};
+    FIELDS.forEach(function (c) {
+      var l = document.createElement("label"); if (c[2]) l.className = c[2];
+      l.appendChild(document.createTextNode(c[1]));
+      var i = document.createElement("input"); i.type = "text"; i.value = f[c[0]]; i.maxLength = 120; i.id = "a-" + c[0] + "-" + f.id;
+      l.appendChild(i); w.appendChild(l); inputs[c[0]] = i;
+    });
+    var acts = document.createElement("div"); acts.className = "acts full";
+    var sv = document.createElement("button"); sv.type = "button"; sv.textContent = "Guardar cambios";
+    var dl = document.createElement("button"); dl.type = "button"; dl.className = "danger"; dl.textContent = "Eliminar";
+    var armed = false;
+    sv.addEventListener("click", function () {
+      var fila = { id: f.id }; FIELDS.forEach(function (c) { fila[c[0]] = inputs[c[0]].value.trim(); });
+      sv.disabled = true;
+      call({ action: "admin_actualizar", clave: clave, fila: fila }).then(function (j) { if (!j.ok) throw 0; Object.assign(f, fila); say(aMsg, "Cambios guardados.", "ok"); })
+        .catch(function () { say(aMsg, "No se pudo guardar.", "err"); }).then(function () { sv.disabled = false; });
+    });
+    dl.addEventListener("click", function () {
+      if (!armed) { armed = true; dl.textContent = "Confirmar eliminación"; setTimeout(function () { armed = false; dl.textContent = "Eliminar"; }, 4000); return; }
+      call({ action: "admin_eliminar", clave: clave, id: f.id }).then(function (j) { if (!j.ok) throw 0; say(aMsg, "Turno eliminado.", "ok"); return adminCargar(); })
+        .catch(function () { say(aMsg, "No se pudo eliminar.", "err"); });
+    });
+    acts.appendChild(sv); acts.appendChild(dl); w.appendChild(acts); box.appendChild(w);
+  });
+}
+$("login").addEventListener("submit", function (e) {
+  e.preventDefault(); clave = $("clave").value;
+  say($("login-msg"), "Verificando…");
+  adminCargar().then(function () { $("login").hidden = true; $("panel").hidden = false; })
+    .catch(function (err) { say($("login-msg"), err && err.message === "clave_incorrecta" ? "Clave incorrecta." : "No se pudo conectar.", "err"); });
+});
+$("a-add").addEventListener("click", function () {
+  call({ action: "admin_agregar", clave: clave, fila: { pestana: "apoderados", descripcion: "Nuevo turno", fecha: "2026-10-24", horario: "", inicio: "99:00", n: 0, nombre: "", curso: "" } })
+    .then(function (j) { if (!j.ok) throw 0; say(aMsg, "Turno agregado; completa sus datos.", "ok"); return adminCargar(); })
+    .catch(function () { say(aMsg, "No se pudo agregar.", "err"); });
+});
+function csvCell(v) { v = String(v == null ? "" : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+$("a-csv").addEventListener("click", function () {
+  var cols = ["pestana", "descripcion", "fecha", "horario", "inicio", "n", "nombre", "curso"];
+  var lines = [cols.join(",")].concat(aFilas.map(function (f) { return cols.map(function (c) { return csvCell(f[c]); }).join(","); }));
+  var blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "turnos-olimpiadas.csv";
+  document.body.appendChild(a); a.click(); a.remove();
+});
+
+/* ---------- Inicio ---------- */
+if (location.hash === "#admin") { $("public").hidden = true; $("admin").hidden = false; }
+else cargar();
+</script>
+</body>
+</html>

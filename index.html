@@ -247,8 +247,14 @@ $("a-csv").addEventListener("click", function () {
 });
 
 /* ---------- Inicio ---------- */
-if (location.hash === "#admin") { $("public").hidden = true; $("admin").hidden = false; }
-else cargar();
+var cargado = false;
+function ruta() {
+  var esAdmin = /^#admin/i.test(location.hash) || /(^|[?&])admin(=|&|$)/.test(location.search);
+  $("public").hidden = esAdmin; $("admin").hidden = !esAdmin;
+  if (!esAdmin && !cargado) { cargado = true; cargar(); }
+}
+window.addEventListener("hashchange", ruta);
+ruta();
 </script>
 </body>
 </html>
